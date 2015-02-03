@@ -1,0 +1,8 @@
+var config = {}
+
+config.db = {};
+config.db.host = '';
+config.db.user = '';
+config.db.password = '';
+
+module.exports = config;

@@ -4,10 +4,15 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var config = require('./config')
 
 // Database
-var mongo = require('mongoskin');
-var db = mongo.db("mongodb://localhost:27017/nodetest2", {native_parser:true});
+var mysql      = require('mysql');
+var db = mysql.createConnection({
+  host     : config.host,
+  user     : config.user,
+  password : config.password,
+});
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -35,8 +40,6 @@ app.use(function(req,res,next){
 app.use('/', routes);
 app.use('/users', users);
 
-
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
@@ -51,10 +54,10 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
-        res.render('error', {
+        res.json({ 'error': {
             message: err.message,
             error: err
-        });
+        }});
     });
 }
 
@@ -62,10 +65,11 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
+
+    res.json({ 'error': {
         message: err.message,
         error: {}
-    });
+    }});
 });
 
 
