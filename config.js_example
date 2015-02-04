@@ -4,5 +4,6 @@ config.db = {};
 config.db.host = '';
 config.db.user = '';
 config.db.password = '';
+config.db.database = 'sakila';
 
 module.exports = config;

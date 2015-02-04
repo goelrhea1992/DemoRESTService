@@ -1,25 +1,22 @@
 var express = require('express');
 var router = express.Router();
 
+function throw_err(err, res) {
+    res.json({ 'error': {
+        message: err.message,
+        error: err
+    }});
+    throw err;
+}
+
 /*
  * GET actors.
  */
 router.get('/', function(req, res) {
     var db = req.db;
-    // db.collection('userlist').find().toArray(function (err, items) {
-    //     res.json(items);
-    // });
-
-    db.connect();
-    db.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
-        if (err) {
-            res.json({ 'error': {
-                message: err.message,
-                error: err
-            }});
-            throw err;
-        }
-        res.json({ 'The solution is': rows[0].solution });
+    db.query('SELECT * FROM actor', function(err, rows, fields) {
+        if (err) throw_err(err, res);
+        res.json({ 'actors': rows });
     });
     db.end();
 });
@@ -40,8 +37,13 @@ router.post('/', function(req, res) {
 /*
  * GET actor/id.
  */
-router.delete('/:id', function(req, res) {
-    res.json({ 'Get this actor': 1 });
+router.get('/:id', function(req, res) {
+    var db = req.db;
+    db.query('SELECT * FROM actor WHERE actor_id = ?', [req.params.id], function(err, rows, fields) {
+        if (err) throw_err(err, res);
+        res.json(rows[0]);
+    });
+    db.end();
 });
 
 /*

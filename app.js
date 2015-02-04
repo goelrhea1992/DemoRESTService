@@ -8,11 +8,7 @@ var config = require('./config')
 
 // Database
 var mysql = require('mysql');
-var db = mysql.createConnection({
-  host     : config.db.host,
-  user     : config.db.user,
-  password : config.db.password,
-});
+var db = mysql.createConnection(config.db);
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -33,7 +29,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Make our db accessible to our router
-app.use(function(req,res,next){
+app.use(function(req, res, next){
     req.db = db;
     next();
 });
