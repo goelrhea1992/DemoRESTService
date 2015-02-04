@@ -5,11 +5,23 @@ var router = express.Router();
  * GET actors.
  */
 router.get('/', function(req, res) {
-    // var db = req.db;
+    var db = req.db;
     // db.collection('userlist').find().toArray(function (err, items) {
     //     res.json(items);
     // });
-    res.json({ 'Get all actors': 1 });
+
+    db.connect();
+    db.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
+        if (err) {
+            res.json({ 'error': {
+                message: err.message,
+                error: err
+            }});
+            throw err;
+        }
+        res.json({ 'The solution is': rows[0].solution });
+    });
+    db.end();
 });
 
 /*

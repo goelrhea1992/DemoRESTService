@@ -7,17 +7,16 @@ var bodyParser = require('body-parser');
 var config = require('./config')
 
 // Database
-var mysql      = require('mysql');
+var mysql = require('mysql');
 var db = mysql.createConnection({
-  host     : config.host,
-  user     : config.user,
-  password : config.password,
+  host     : config.db.host,
+  user     : config.db.user,
+  password : config.db.password,
 });
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var actors = require('./routes/actors');
-
 
 var app = express();
 
@@ -41,7 +40,7 @@ app.use(function(req,res,next){
 
 app.use('/', routes);
 app.use('/users', users);
-app.use('/', actors);
+app.use('/actors', actors);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
