@@ -18,24 +18,23 @@ router.get('/', function(req, res) {
         if (err) throw_err(err, res);
         res.json({ 'actors': rows });
     });
-    db.end();
 });
 
 /*
  * POST actors.
  */
 router.post('/', function(req, res) {
-    // var db = req.db;
-    // db.collection('userlist').insert(req.body, function(err, result){
-    //     res.send(
-    //         (err === null) ? { msg: '' } : { msg: err }
-    //     );
-    // });
-    res.json({ 'Add an actor': 1 });
+    var db = req.db;
+    query = 'INSERT INTO actor (first_name,last_name) VALUES (?,?,?)';
+    params = [req.body.first_name, req.body.last_name]
+    db.query(query, params, function(err, rows, fields) {
+        if (err) throw_err(err, res);
+        res.json({ 'success': 1 });
+    });
 });
 
 /*
- * GET actor/id.
+ * GET actors/id.
  */
 router.get('/:id', function(req, res) {
     var db = req.db;
@@ -43,26 +42,32 @@ router.get('/:id', function(req, res) {
         if (err) throw_err(err, res);
         res.json(rows[0]);
     });
-    db.end();
 });
 
 /*
  * PUT actor/id.
  */
 router.put('/:id', function(req, res) {
-    res.json({ 'Update an actor': 1 });
+    var db = req.db;
+    query = 'UPDATE actor SET first_name=?, last_name=? WHERE actor_id = ?';
+    params = [req.body.first_name, req.body.last_name, req.params.id]
+    db.query(query, params, function(err, rows, fields) {
+        if (err) throw_err(err, res);
+        res.json({ 'success': 1 });
+    });
 });
 
 /*
  * DELETE actor/id.
  */
-router.delete('/:id', function(req, res) {
-    // var db = req.db;
-    // var userToDelete = req.params.id;
-    // db.collection('userlist').removeById(userToDelete, function(err, result) {
-    //     res.send((result === 1) ? { msg: '' } : { msg:'error: ' + err });
-    // });
-    res.json({ 'Delete this actor': 1 });
+router.delete('/:id', function(req, res) {    
+    var db = req.db;
+    query = 'DELETE FROM actor WHERE actor_id = ?';
+    params = [req.params.id]
+    db.query(query, params, function(err, rows, fields) {
+        if (err) throw_err(err, res);
+        res.json({ 'success': 1 });
+    });
 });
 
 module.exports = router;
