@@ -25,7 +25,7 @@ router.get('/', function(req, res) {
  */
 router.post('/', function(req, res) {
     var db = req.db;
-    query = 'INSERT INTO language (name) VALUES (?,?)';
+    query = 'INSERT INTO language (name) VALUES (?)';
     params = [req.body.name]
     db.query(query, params, function(err, rows, fields) {
         if (err) throw_err(err, res);
