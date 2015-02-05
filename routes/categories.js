@@ -16,7 +16,11 @@ router.get('/', function(req, res) {
     var db = req.db;
     query='SELECT * FROM category limit ?,?';
     var offset =parseInt(req.query.offset);
-    var limit =parseInt(req.query.limit);
+    var limit =req.query.limit;
+    if(limit!=null)
+        limit =parseInt(limit);
+    if(limit ==null || limit >10)
+        limit=10;
     params=  [offset,limit]
     db.query(query,params, function(err, rows, fields) {
         if (err) throw_err(err, res);
