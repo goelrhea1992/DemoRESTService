@@ -14,7 +14,11 @@ function throw_err(err, res) {
  */
 router.get('/', function(req, res) {
     var db = req.db;
-    db.query('SELECT * FROM category', function(err, rows, fields) {
+    query='SELECT * FROM category limit ?,?';
+    var offset =parseInt(req.query.offset);
+    var limit =parseInt(req.query.limit);
+    params=  [offset,limit]
+    db.query(query,params, function(err, rows, fields) {
         if (err) throw_err(err, res);
         res.json({ 'categories': rows });
     });
