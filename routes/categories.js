@@ -14,18 +14,30 @@ function throw_err(err, res) {
  */
 router.get('/', function(req, res) {
     var db = req.db;
-    query='SELECT * FROM category limit ?,?';
-    var offset =parseInt(req.query.offset);
+    var offset =req.query.offset;
     var limit =req.query.limit;
-    if(limit!=null)
-        limit =parseInt(limit);
-    if(limit ==null || limit >10)
-        limit=10;
-    params=  [offset,limit]
-    db.query(query,params, function(err, rows, fields) {
-        if (err) throw_err(err, res);
-        res.json({ 'categories': rows });
-    });
+        if(limit!=null)
+            limit =parseInt(limit);
+        if(limit ==null || limit >10)
+            limit=10;
+    if(offset!=null){
+        query='SELECT * FROM category limit ?,?';
+        offset = parseInt(offset);
+        params=  [offset,limit]
+        db.query(query,params, function(err, rows, fields) {
+           if (err) throw_err(err, res);
+          res.json({ 'categories': rows });
+     });
+    }
+    var q = req.query.q;
+    if(q!=null){
+        query='SELECT * FROM category where ? ';
+        params =[q]
+        db.query(query,params, function(err, rows, fields) {
+           if (err) throw_err(err, res);
+          res.json({ 'categories': rows });
+     });
+    }
 });
 
 /*
