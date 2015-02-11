@@ -10,23 +10,23 @@ function throw_err(err, res) {
 }
 
 /*
- * GET actors.
+ * GET languages.
  */
 router.get('/', function(req, res) {
     var db = req.db;
-    db.query('SELECT * FROM actor', function(err, rows, fields) {
+    db.query('SELECT * FROM language', function(err, rows, fields) {
         if (err) throw_err(err, res);
-        res.json({ 'actors': rows });
+        res.json({ 'languages': rows });
     });
 });
 
 /*
- * POST actors.
+ * POST languages.
  */
 router.post('/', function(req, res) {
     var db = req.db;
-    query = 'INSERT INTO actor (first_name,last_name) VALUES (?,?)';
-    params = [req.body.first_name, req.body.last_name]
+    query = 'INSERT INTO language (name) VALUES (?)';
+    params = [req.body.name]
     db.query(query, params, function(err, rows, fields) {
         if (err) throw_err(err, res);
         res.json({ 'success': 1 });
@@ -34,23 +34,23 @@ router.post('/', function(req, res) {
 });
 
 /*
- * GET actors/id.
+ * GET languages/id.
  */
 router.get('/:id', function(req, res) {
     var db = req.db;
-    db.query('SELECT * FROM actor WHERE actor_id = ?', [req.params.id], function(err, rows, fields) {
+    db.query('SELECT * FROM language WHERE language_id = ?', [req.params.id], function(err, rows, fields) {
         if (err) throw_err(err, res);
         res.json(rows[0]);
     });
 });
 
 /*
- * PUT actor/id.
+ * PUT language/id.
  */
 router.put('/:id', function(req, res) {
     var db = req.db;
-    query = 'UPDATE actor SET first_name=?, last_name=? WHERE actor_id = ?';
-    params = [req.body.first_name, req.body.last_name, req.params.id]
+    query = 'UPDATE language SET name=? WHERE language_id = ?';
+    params = [req.body.name, req.params.id]
     db.query(query, params, function(err, rows, fields) {
         if (err) throw_err(err, res);
         res.json({ 'success': 1 });
@@ -58,11 +58,11 @@ router.put('/:id', function(req, res) {
 });
 
 /*
- * DELETE actor/id.
+ * DELETE language/id.
  */
 router.delete('/:id', function(req, res) {    
     var db = req.db;
-    query = 'DELETE FROM actor WHERE actor_id = ?';
+    query = 'DELETE FROM language WHERE language_id = ?';
     params = [req.params.id]
     db.query(query, params, function(err, rows, fields) {
         if (err) throw_err(err, res);
