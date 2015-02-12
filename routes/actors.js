@@ -126,7 +126,7 @@ router.put('/:id', function(req, res) {
 /*
  * DELETE actor/id.
  */
-router.delete('/:id', function(req, res) 
+router.delete('/:id', function(req, res) {
     var db = req.db;
     query = 'DELETE FROM actor WHERE actor_id = ?';
     params = [req.params.id]
