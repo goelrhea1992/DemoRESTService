@@ -56,8 +56,8 @@ router.get('/', function(req, res) {
             'data': film,
             'links': [
                 {
-                    'rel':  'languages', // self too?
-                    'href': 'languages/' 
+                    'rel':  'self', 
+                    'href': 'films/'  //change later
                 }
             ]
         });
