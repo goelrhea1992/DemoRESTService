@@ -20,8 +20,8 @@ function row_to_obj(row) {
                 id: row.language_id
             },
             link: {
-                rel: 'language',
-                href: '/language/'+row.language_id
+                rel: 'languages',
+                href: '/languages/'+row.language_id
             }
             },
 
@@ -56,8 +56,8 @@ router.get('/', function(req, res) {
             'data': film,
             'links': [
                 {
-                    'rel':  'language', // self too?
-                    'href': 'language/' 
+                    'rel':  'languages', // self too?
+                    'href': 'languages/' 
                 }
             ]
         });

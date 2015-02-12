@@ -13,7 +13,7 @@ var db = mysql.createConnection(config.db);
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var actors = require('./routes/actors');
-var language = require('./routes/language');
+var languages = require('./routes/languages');
 var categories = require('./routes/categories');
 var films = require('./routes/films');
 
@@ -40,7 +40,7 @@ app.use(function(req, res, next){
 app.use('/', routes);
 app.use('/users', users);
 app.use('/actors', actors);
-app.use('/language', language);
+app.use('/languages', languages);
 app.use('/categories', categories);
 app.use('/films', films);
 
