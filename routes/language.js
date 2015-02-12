@@ -20,6 +20,18 @@ router.get('/', function(req, res) {
     });
 });
 
+
+/*
+ * GET languages/id.
+ */
+router.get('/:id', function(req, res) {
+    var db = req.db;
+    db.query('SELECT * FROM language WHERE language_id = ?', [req.params.id], function(err, rows, fields) {
+        if (err) throw_err(err, res);
+        res.json(rows[0]);
+    });
+});
+
 /*
  * POST languages.
  */
@@ -33,16 +45,6 @@ router.post('/', function(req, res) {
     });
 });
 
-/*
- * GET languages/id.
- */
-router.get('/:id', function(req, res) {
-    var db = req.db;
-    db.query('SELECT * FROM language WHERE language_id = ?', [req.params.id], function(err, rows, fields) {
-        if (err) throw_err(err, res);
-        res.json(rows[0]);
-    });
-});
 
 /*
  * PUT language/id.
