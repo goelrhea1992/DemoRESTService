@@ -14,7 +14,7 @@ function throw_err(err, res) {
  */
 router.get('/', function(req, res) {
     var db = req.db;
-    db.query('SELECT * FROM languages', function(err, rows, fields) {
+    db.query('SELECT * FROM language', function(err, rows, fields) {
         if (err) throw_err(err, res);
         res.json({ 'languages': rows });
     });
@@ -26,7 +26,7 @@ router.get('/', function(req, res) {
  */
 router.get('/:id', function(req, res) {
     var db = req.db;
-    db.query('SELECT * FROM languages WHERE language_id = ?', [req.params.id], function(err, rows, fields) {
+    db.query('SELECT * FROM language WHERE language_id = ?', [req.params.id], function(err, rows, fields) {
         if (err) throw_err(err, res);
         res.json(rows[0]);
     });
@@ -37,7 +37,7 @@ router.get('/:id', function(req, res) {
  */
 router.post('/', function(req, res) {
     var db = req.db;
-    query = 'INSERT INTO languages (name) VALUES (?)';
+    query = 'INSERT INTO language (name) VALUES (?)';
     params = [req.body.name]
     db.query(query, params, function(err, rows, fields) {
         if (err) throw_err(err, res);
@@ -51,7 +51,7 @@ router.post('/', function(req, res) {
  */
 router.put('/:id', function(req, res) {
     var db = req.db;
-    query = 'UPDATE languages SET name=? WHERE language_id = ?';
+    query = 'UPDATE language SET name=? WHERE language_id = ?';
     params = [req.body.name, req.params.id]
     db.query(query, params, function(err, rows, fields) {
         if (err) throw_err(err, res);
@@ -64,7 +64,7 @@ router.put('/:id', function(req, res) {
  */
 router.delete('/:id', function(req, res) {    
     var db = req.db;
-    query = 'DELETE FROM languages WHERE language_id = ?';
+    query = 'DELETE FROM language WHERE language_id = ?';
     params = [req.params.id]
     db.query(query, params, function(err, rows, fields) {
         if (err) throw_err(err, res);
