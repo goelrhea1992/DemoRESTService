@@ -67,7 +67,14 @@ router.get('/', function(req, res) {
         id: 'actor_id'
     }
     where = get_where(req, tql_fields);
-    db.query('SELECT * FROM actor'+where.string, where.array, function(err, rows, fields) {
+
+    var projectionFields;
+    if(req.query.projectionFields)
+        projectionFields = req.query.projectionFields;
+    else
+        projectionFields = '*';
+
+    db.query('SELECT ' + projectionFields + ' FROM actor'+where.string, where.array, function(err, rows, fields) {
         actors = []
         for(i = 0; i < rows.length; i++) {
             actors.push(row_to_obj(rows[i]));
@@ -104,7 +111,13 @@ router.post('/', function(req, res) {
  */
 router.get('/:id', function(req, res) {
     var db = req.db;
-    db.query('SELECT * FROM actor WHERE actor_id = ?', [req.params.id], function(err, rows, fields) {
+    var projectionFields;
+    if(req.query.projectionFields)
+        projectionFields = req.query.projectionFields;
+    else
+        projectionFields = '*';
+
+    db.query('SELECT ' + projectionFields + ' FROM actor WHERE actor_id = ?', [req.params.id], function(err, rows, fields) {
         if (err) throw_err(err, res);
         res.json(row_to_obj(rows[0]));
     });
