@@ -13,29 +13,59 @@ function throw_err(err, res) {
  * GET categories.
  */
 router.get('/', function(req, res) {
+    var table='category';
+    var url_table='categories';
     var db = req.db;
     var offset =req.query.offset;
     var limit =req.query.limit;
-        if(limit!=null)
-            limit =parseInt(limit);
-        if(limit ==null || limit >10)
-            limit=10;
+    if(limit!=null)
+        limit =parseInt(limit);
+    if(limit ==null || limit >10)
+        limit=10;
     if(offset!=null){
-        query='SELECT * FROM category limit ?,?';
+        query='SELECT * FROM '+table+' limit ?,?';
         offset = parseInt(offset);
+        var prev_num= offset-limit;
+        var next_num=offset+limit;
+        var prev_url=url_table+'?offset='+prev_num+'&limit='+limit;
+        if(prev_num<0)
+            prev_url='';
+        params=[]
+        var last_num =1000;
+        query_getLastNum = 'SELECT count(*) as num FROM '+table;
+        db.query(query_getLastNum,params, function(err, rows, fields) {
+            if (err) throw_err(err, res);
+            last_num=rows[0].num;
+        //sql.query(
+       //     'SELECT count(*) FROM ' + 'category'
+     //   ).then(function(query_res) {
+   // last_num = query_res[0].p_key;
+ // });
+    });
+        var next_url=url_table+'?offset='+next_num+'&limit='+limit;
+        if(next_num > last_num)
+           next_url='';
+       var self_url = url_table+'?offset='+offset+'&limit='+limit;
         params=  [offset,limit]
         db.query(query,params, function(err, rows, fields) {
            if (err) throw_err(err, res);
-          res.json({ 'categories': rows });
-     });
-    }
-    var q = req.query.q;
-    if(q!=null){
-        query='SELECT * FROM category where ? ';
-        params =[q]
-        db.query(query,params, function(err, rows, fields) {
-           if (err) throw_err(err, res);
-          res.json({ 'categories': rows });
+          res.json({
+            'data': rows,
+            'links': [
+                {
+                    'rel':  'self',
+                    'href': self_url
+                },
+                {
+                    'rel':  'prev',
+                    'href': prev_url
+                },
+                {
+                    'rel':  'next',
+                    'href': next_url
+                }
+            ]
+        });
      });
     }
 });
