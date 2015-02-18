@@ -1,9 +1,9 @@
 var config = {}
 
 config.db = {};
-config.db.host = '';
-config.db.user = '';
-config.db.password = '';
+config.db.host = 'sakila.cnc9r02t0afx.us-west-2.rds.amazonaws.com';
+config.db.user = 'ateam';
+config.db.password = 'ateam123';
 config.db.database = 'sakila';
 
 module.exports = config;

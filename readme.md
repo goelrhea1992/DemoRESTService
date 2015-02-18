@@ -6,7 +6,7 @@ Created for Donald Ferguson's course *Modern Internet App Development* at Columb
 * Meril Dsouza ( @msd2178 )
 * Rhea Goel ( @goelrhea1992 )
 * Robert Kuykendall ( @rkuykendall )
-* Diwakar Mahajan
+* Diwakar Mahajan (@dm3084)
 
 ## Installation
 

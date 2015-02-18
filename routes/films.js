@@ -43,7 +43,14 @@ function row_to_obj(row) {
  */
 router.get('/', function(req, res) {
     var db = req.db;
-    db.query('SELECT * FROM film', function(err, rows, fields) {
+    
+    var projectionFields;
+    if(req.query.projectionFields)
+        projectionFields = req.query.projectionFields;
+    else
+        projectionFields = '*';
+
+    db.query('SELECT '+projectionFields+' FROM film', function(err, rows, fields) {
         //if (err) throw_err(err, res);
         //res.json({ 'films': rows });
         film = []
@@ -71,7 +78,13 @@ router.get('/', function(req, res) {
  */
 router.get('/:id', function(req, res) {
     var db = req.db;
-    db.query('SELECT * FROM film WHERE film_id = ?', [req.params.id], function(err, rows, fields) {
+    var projectionFields;
+    if(req.query.projectionFields)
+        projectionFields = req.query.projectionFields;
+    else
+        projectionFields = '*';
+
+    db.query('SELECT '+projectionFields+' FROM film WHERE film_id = ?', [req.params.id], function(err, rows, fields) {
         if (err) throw_err(err, res);
         //res.json(rows[0]);
         res.json(row_to_obj(rows[0]));
