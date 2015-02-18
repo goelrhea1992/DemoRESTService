@@ -29,15 +29,6 @@ router.get('/', function(req, res) {
           res.json({ 'categories': rows });
      });
     }
-    var q = req.query.q;
-    if(q!=null){
-        query='SELECT * FROM category where ? ';
-        params =[q]
-        db.query(query,params, function(err, rows, fields) {
-           if (err) throw_err(err, res);
-          res.json({ 'categories': rows });
-     });
-    }
 });
 
 /*

@@ -14,9 +14,35 @@ function throw_err(err, res) {
  */
 router.get('/', function(req, res) {
     var db = req.db;
-    db.query('SELECT * FROM language', function(err, rows, fields) {
+    
+    var projectionFields;
+    if(req.query.projectionFields)
+        projectionFields = req.query.projectionFields;
+    else
+        projectionFields = '*';
+
+    db.query('SELECT ' + projectionFields + ' FROM language', function(err, rows, fields) {
         if (err) throw_err(err, res);
         res.json({ 'languages': rows });
+    });
+});
+
+
+/*
+ * GET languages/id.
+ */
+router.get('/:id', function(req, res) {
+    var db = req.db;
+
+    var projectionFields;
+    if(req.query.projectionFields)
+        projectionFields = req.query.projectionFields;
+    else
+        projectionFields = '*';
+
+    db.query('SELECT ' + projectionFields + ' FROM language WHERE language_id = ?', [req.params.id], function(err, rows, fields) {
+        if (err) throw_err(err, res);
+        res.json(rows[0]);
     });
 });
 
@@ -33,19 +59,9 @@ router.post('/', function(req, res) {
     });
 });
 
-/*
- * GET languages/id.
- */
-router.get('/:id', function(req, res) {
-    var db = req.db;
-    db.query('SELECT * FROM language WHERE language_id = ?', [req.params.id], function(err, rows, fields) {
-        if (err) throw_err(err, res);
-        res.json(rows[0]);
-    });
-});
 
 /*
- * PUT language/id.
+ * PUT languages/id.
  */
 router.put('/:id', function(req, res) {
     var db = req.db;
@@ -58,7 +74,7 @@ router.put('/:id', function(req, res) {
 });
 
 /*
- * DELETE language/id.
+ * DELETE languages/id.
  */
 router.delete('/:id', function(req, res) {    
     var db = req.db;

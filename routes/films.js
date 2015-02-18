@@ -9,16 +9,89 @@ function throw_err(err, res) {
     throw err;
 }
 
+function row_to_obj(row) {
+    var film = {
+        film_id: row.film_id,
+        title: row.title,
+        description: row.description,
+        release_year: row.release_year,
+        language: {
+            data: {
+                id: row.language_id
+            },
+            link: {
+                rel: 'languages',
+                href: '/languages/'+row.language_id
+            }
+            },
+
+        original_language_id: row.original_language_id,
+        rental_duration: row.rental_duration,
+        rental_rate: row.rental_rate,
+        length: row.length,
+        replacement_cost: row.replacement_cost,
+        rating: row.rating,
+        special_features: row.special_features,
+        last_update: row.last_update
+
+    }
+    return film;
+}
+
 /*
  * GET films.
  */
 router.get('/', function(req, res) {
     var db = req.db;
-    db.query('SELECT * FROM film', function(err, rows, fields) {
+    
+    var projectionFields;
+    if(req.query.projectionFields)
+        projectionFields = req.query.projectionFields;
+    else
+        projectionFields = '*';
+
+    db.query('SELECT '+projectionFields+' FROM film', function(err, rows, fields) {
+        //if (err) throw_err(err, res);
+        //res.json({ 'films': rows });
+        film = []
+        for(i = 0; i < rows.length; i++) {
+            film.push(row_to_obj(rows[i]));
+        }
+
         if (err) throw_err(err, res);
-        res.json({ 'films': rows });
+        res.json({
+            'data': film,
+            'links': [
+                {
+                    'rel':  'self', 
+                    'href': 'films/'  //change later
+                }
+            ]
+        });
+
     });
 });
+
+
+/*
+ * GET films/id.
+ */
+router.get('/:id', function(req, res) {
+    var db = req.db;
+    var projectionFields;
+    if(req.query.projectionFields)
+        projectionFields = req.query.projectionFields;
+    else
+        projectionFields = '*';
+
+    db.query('SELECT '+projectionFields+' FROM film WHERE film_id = ?', [req.params.id], function(err, rows, fields) {
+        if (err) throw_err(err, res);
+        //res.json(rows[0]);
+        res.json(row_to_obj(rows[0]));
+
+    });
+});
+
 
 /*
  * POST films.
@@ -30,17 +103,6 @@ router.post('/', function(req, res) {
     db.query(query, params, function(err, rows, fields) {
         if (err) throw_err(err, res);
         res.json({ 'success': 1 });
-    });
-});
-
-/*
- * GET films/id.
- */
-router.get('/:id', function(req, res) {
-    var db = req.db;
-    db.query('SELECT * FROM film WHERE film_id = ?', [req.params.id], function(err, rows, fields) {
-        if (err) throw_err(err, res);
-        res.json(rows[0]);
     });
 });
 
