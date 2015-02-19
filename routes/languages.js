@@ -13,18 +13,16 @@ function throw_err(err, res) {
  * GET languages.
  */
 router.get('/', function(req, res) {
-    var db = req.db;
-    
+    var table='language';
+    var url_table='languages';
     var projectionFields;
+    
     if(req.query.projectionFields)
         projectionFields = req.query.projectionFields;
     else
         projectionFields = '*';
 
-    db.query('SELECT ' + projectionFields + ' FROM language', function(err, rows, fields) {
-        if (err) throw_err(err, res);
-        res.json({ 'languages': rows });
-    });
+    return pagination(req, res, table, url_table,projectionFields);
 });
 
 
