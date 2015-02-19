@@ -75,11 +75,8 @@ router.post('/', function(req, res) {
  */
 router.get('/:id', function(req, res) {
     var db = req.db;
-<<<<<<< HEAD
-    db.query('SELECT * FROM actor WHERE actor_id = ?', [req.params.id], function(err, rows, fields) {
-        if (err) tools.throw_err(err, res);
-=======
     var projectionFields;
+
     if(req.query.projectionFields)
         projectionFields = req.query.projectionFields;
     else
@@ -87,7 +84,6 @@ router.get('/:id', function(req, res) {
 
     db.query('SELECT ' + projectionFields + ' FROM actor WHERE actor_id = ?', [req.params.id], function(err, rows, fields) {
         if (err) throw_err(err, res);
->>>>>>> 8703360533052a814cb25421bf1c2e3214102da6
         res.json(row_to_obj(rows[0]));
     });
 });
