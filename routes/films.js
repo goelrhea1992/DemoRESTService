@@ -43,33 +43,15 @@ function row_to_obj(row) {
  */
 router.get('/', function(req, res) {
     var db = req.db;
-    
+    var table='film';
+    var url_table='films';
     var projectionFields;
     if(req.query.projectionFields)
         projectionFields = req.query.projectionFields;
     else
         projectionFields = '*';
 
-    db.query('SELECT '+projectionFields+' FROM film', function(err, rows, fields) {
-        //if (err) throw_err(err, res);
-        //res.json({ 'films': rows });
-        film = []
-        for(i = 0; i < rows.length; i++) {
-            film.push(row_to_obj(rows[i]));
-        }
-
-        if (err) throw_err(err, res);
-        res.json({
-            'data': film,
-            'links': [
-                {
-                    'rel':  'self', 
-                    'href': 'films/'  //change later
-                }
-            ]
-        });
-
-    });
+    return pagination(req, res, table, url_table,projectionFields);
 });
 
 
