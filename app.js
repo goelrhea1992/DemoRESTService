@@ -65,8 +65,36 @@ if (app.get('env') === 'development') {
     });
 }
 
+function row_to_obj(row) {
+    var film = {
+        film_id: row.film_id,
+        title: row.title,
+        description: row.description,
+        release_year: row.release_year,
+        language: {
+            data: {
+                id: row.language_id
+            },
+            link: {
+                rel: 'languages',
+                href: '/languages/'+row.language_id
+            }
+            },
 
-pagination = function (req,res,table,url_table){
+        original_language_id: row.original_language_id,
+        rental_duration: row.rental_duration,
+        rental_rate: row.rental_rate,
+        length: row.length,
+        replacement_cost: row.replacement_cost,
+        rating: row.rating,
+        special_features: row.special_features,
+        last_update: row.last_update
+
+    }
+    return film;
+}
+
+pagination = function (req,res,table,url_table,projectionFields){
     var offset =req.query.offset;
     var limit =req.query.limit;
     if(limit!=null)
@@ -74,7 +102,7 @@ pagination = function (req,res,table,url_table){
     if(limit ==null || limit >10)
         limit=10;
     if(offset!=null){
-        query='SELECT * FROM '+table+' limit ?,?';
+        query='SELECT '+ projectionFields+' FROM '+table+' limit ?,?';
         offset = parseInt(offset);
         var prev_num= offset-limit;
         var next_num=offset+limit;
@@ -100,7 +128,8 @@ pagination = function (req,res,table,url_table){
         params=  [offset,limit]
         db.query(query,params, function(err, rows, fields) {
            if (err) throw_err(err, res);
-          res.json({
+           
+            res.json({
             'data': rows,
             'links': [
                 {
