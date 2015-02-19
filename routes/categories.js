@@ -16,7 +16,14 @@ function throw_err(err, res) {
 router.get('/', function(req, res) {
     var table='category';
     var url_table='categories';
-    return pagination(req, res, table, url_table);
+    var projectionFields;
+    
+    if(req.query.projectionFields)
+        projectionFields = req.query.projectionFields;
+    else
+        projectionFields = '*';
+
+    return pagination(req, res, table, url_table,projectionFields);
 });
 
 /*
