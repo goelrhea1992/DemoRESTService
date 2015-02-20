@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var tools = require('./tools');
 
 function throw_err(err, res) {
     res.json({ 'error': {
@@ -51,7 +52,7 @@ router.get('/', function(req, res) {
     else
         projectionFields = '*';
 
-    return pagination(req, res, table, url_table,projectionFields);
+    return tools.pagination(req, res, table, url_table,projectionFields);
 });
 
 

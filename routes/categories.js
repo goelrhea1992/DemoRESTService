@@ -23,7 +23,7 @@ router.get('/', function(req, res) {
     else
         projectionFields = '*';
 
-    return pagination(req, res, table, url_table,projectionFields);
+    return tools.pagination(req, res, table, url_table,projectionFields);
 });
 
 /*
