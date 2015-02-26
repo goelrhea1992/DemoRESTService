@@ -46,7 +46,17 @@ router.get('/:id', function(req, res) {
     var db = req.db;
     db.query('SELECT * FROM category WHERE category_id = ?', [req.params.id], function(err, rows, fields) {
         if (err) throw_err(err, res);
+        if(typeof rows[0] === 'undefined')
+            res.status(404).send({
+            "error": {
+               "message": "Not Found",
+                  "error": {
+                      "status": 404
+                     }
+             }
+        });
         res.json(rows[0]);
+
     });
 });
 
