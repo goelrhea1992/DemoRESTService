@@ -63,12 +63,10 @@ router.post('/', function(req, res) {
  * PUT languages/id.
  */
 router.put('/:id', function(req, res) {
-    var db = req.db;
-    query = 'UPDATE language SET name=? WHERE language_id = ?';
-    params = [req.body.name, req.params.id]
-    db.query(query, params, function(err, rows, fields) {
-        if (err) throw_err(err, res);
-        res.json({ 'success': 1 });
+    tools.update(req, res, {
+        name: 'actor',
+        id: 'language_id',
+        allowed: ['name']
     });
 });
 

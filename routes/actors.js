@@ -92,12 +92,10 @@ router.get('/:id', function(req, res) {
  * PUT actor/id.
  */
 router.put('/:id', function(req, res) {
-    var db = req.db;
-    query = 'UPDATE actor SET first_name=?, last_name=? WHERE actor_id = ?';
-    params = [req.body.first_name, req.body.last_name, req.params.id]
-    db.query(query, params, function(err, rows, fields) {
-        if (err) tools.throw_err(err, res);
-        res.json({ 'success': 1 });
+    tools.update(req, res, {
+        name: 'actor',
+        id: 'actor_id',
+        allowed: ['first_name', 'last_name']
     });
 });
 

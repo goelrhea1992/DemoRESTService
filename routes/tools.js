@@ -110,5 +110,32 @@ module.exports = {
                 });
             });
         }
+    },
+    update: function(req, res, resource) {
+        var db = req.db;
+        
+        var fields_arr = [];
+        var params = [];
+        for (var i in resource.allowed) {
+            field = resource.allowed[i];
+            if (req.body.hasOwnProperty(field) == true) {
+                console.log("True");
+                fields_arr.push(field+'=?')
+                params.push(req.body[field]);
+            }
+        }
+        
+        if (fields_arr.length > 0) {
+            var fields_str = fields_arr.join(', ');
+            query = 'UPDATE '+resource.name+' SET '+fields_str+' WHERE '+resource.id+' = ?';
+            params.push(req.params.id);
+        
+            db.query(query, params, function(err, rows, fields) {
+                if (err) throw_err(err, res);
+                res.json({ 'success': 1 });
+            });
+        } else {
+            res.json({ 'success': 1 });
+        }
     }
 };

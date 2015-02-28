@@ -93,12 +93,10 @@ router.post('/', function(req, res) {
  * PUT film/id.
  */
 router.put('/:id', function(req, res) {
-    var db = req.db;
-    query = 'UPDATE film SET title=?,language_id=?, rental_duration=?, rental_rate=?, replacement_cost=? WHERE film_id = ?';
-    params = [req.body.title, req.body.language_id, req.body.rental_duration, req.body.rental_rate, req.body.replacement_cost, req.params.id]
-    db.query(query, params, function(err, rows, fields) {
-        if (err) throw_err(err, res);
-        res.json({ 'success': 1 });
+    tools.update(req, res, {
+        name: 'film',
+        id: 'film_id',
+        allowed: ['title', 'language_id', 'rental_duration', 'rental_rate', 'replacement_cost']
     });
 });
 

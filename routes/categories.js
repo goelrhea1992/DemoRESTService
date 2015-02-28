@@ -64,12 +64,10 @@ router.get('/:id', function(req, res) {
  * PUT categories/id.
  */
 router.put('/:id', function(req, res) {
-    var db = req.db;
-    query = 'UPDATE category SET name=? WHERE category_id = ?';
-    params = [req.body.name, req.params.id]
-    db.query(query, params, function(err, rows, fields) {
-        if (err) throw_err(err, res);
-        res.json({ 'success': 1 });
+    tools.update(req, res, {
+        name: 'category',
+        id: 'category_id',
+        allowed: ['name']
     });
 });
 
