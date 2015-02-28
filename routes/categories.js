@@ -14,16 +14,13 @@ function throw_err(err, res) {
  * GET categories.
  */
 router.get('/', function(req, res) {
-    var table='category';
-    var url_table='categories';
-    var projectionFields;
+    var table = 'category';
+    var url_table = 'categories';
+    var tql_fields = {
+        name: 'name'
+    }
     
-    if(req.query.projectionFields)
-        projectionFields = req.query.projectionFields;
-    else
-        projectionFields = '*';
-
-    return tools.pagination(req, res, table, url_table,projectionFields);
+    return tools.pagination(req, res, table, url_table, tql_fields);
 });
 
 /*

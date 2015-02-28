@@ -46,13 +46,11 @@ router.get('/', function(req, res) {
     var db = req.db;
     var table='film';
     var url_table='films';
-    var projectionFields;
-    if(req.query.projectionFields)
-        projectionFields = req.query.projectionFields;
-    else
-        projectionFields = '*';
+    var tql_fields = {
+        title: 'title'
+    }
 
-    return tools.pagination(req, res, table, url_table,projectionFields);
+    return tools.pagination(req, res, table, url_table, tql_fields);
 });
 
 

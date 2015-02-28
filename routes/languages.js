@@ -16,14 +16,11 @@ function throw_err(err, res) {
 router.get('/', function(req, res) {
     var table='language';
     var url_table='languages';
-    var projectionFields;
-    
-    if(req.query.projectionFields)
-        projectionFields = req.query.projectionFields;
-    else
-        projectionFields = '*';
+    var tql_fields = {
+        name: 'name'
+    }
 
-    return tools.pagination(req, res, table, url_table,projectionFields);
+    return tools.pagination(req, res, table, url_table, tql_fields);
 });
 
 

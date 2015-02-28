@@ -3,7 +3,7 @@ var url = require('url');
 var router = express.Router();
 var tools = require('./tools');
 
-function row_to_obj(row) {
+row_to_obj = function(row) {
     var actor = {
         id: row.actor_id,
         name: {
@@ -16,45 +16,20 @@ function row_to_obj(row) {
         }
     }
     return actor;
-}
+};
 
 /*
  * GET actors.
  */
 router.get('/', function(req, res) {
-    var db = req.db;
-
-    tql_fields = {
+    var table = 'actor';
+    var url_table = 'actors';
+    var tql_fields = {
         first: 'first_name',
-        last: 'last_name',
-        id: 'actor_id'
+        last: 'last_name'
     }
 
-    where = tools.get_where(req, tql_fields);
-
-    var projectionFields;
-    if(req.query.projectionFields)
-        projectionFields = req.query.projectionFields;
-    else
-        projectionFields = '*';
-
-    db.query('SELECT ' + projectionFields + ' FROM actor'+where.string, where.array, function(err, rows, fields) {
-        actors = []
-        for(i = 0; i < rows.length; i++) {
-            actors.push(row_to_obj(rows[i]));
-        }
-
-        if (err) tools.throw_err(err, res);
-        res.json({
-            'data': actors,
-            'links': [
-                {
-                    'rel':  'self',
-                    'href': 'actors'+req.url
-                }
-            ]
-        });
-    });
+    return tools.pagination(req, res, table, url_table, tql_fields);
 });
 
 /*
